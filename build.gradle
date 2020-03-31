@@ -1,0 +1,50 @@
+plugins {
+    id 'com.gradle.plugin-publish' version '0.11.0'
+    id 'maven-publish'
+    id 'groovy'
+}
+
+group 'com.github.mrsarm'
+version '1.0.0-RC1'
+
+sourceCompatibility = 9
+targetCompatibility = 9
+
+repositories {
+    mavenCentral()
+    jcenter()
+}
+
+dependencies {
+    compile gradleApi()
+    compile localGroovy()
+}
+jar.baseName = 'jshell-plugin'
+
+tasks.withType(GroovyCompile) {
+    options.fork = false
+    groovyOptions.fork = false
+}
+
+pluginBundle {
+    website = 'https://github.com/mrsarm/jshell-plugin'
+    vcsUrl = 'https://github.com/mrsarm/jshell-plugin'
+    description = "JShell supports for your gradle project. Let's explore your classes and dependencies with jshell"
+    tags = ['java9', 'jshell', 'repl']
+
+    plugins {
+        jshellPlugin {
+            id = 'com.mrsarm.jshell.plugin'
+            displayName = 'JShell Plugin'
+        }
+    }
+}
+
+publishing {
+    publications {
+        maven(MavenPublication) {
+            artifactId = 'jshell-plugin'
+            artifact jar
+        }
+    }
+}

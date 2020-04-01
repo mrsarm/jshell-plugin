@@ -44,8 +44,30 @@ class JShellPlugin implements Plugin<Project> {
             }
             Thread.currentThread().setContextClassLoader(ClassLoader.getSystemClassLoader()) // promote class loader
             def path = pathSet.join(System.properties['os.name'].toLowerCase().contains('windows') ? ';' : ':')
-            jshellTask.logger.debug(":jshell executing with --class-path \"{}\"", path)
-            JavaShellToolBuilder.builder().run((String[])["--class-path", path].toArray())
+            jshellTask.logger.info(":jshell executing with --class-path \"{}\"", path)
+            String[] args = [
+                "--class-path", path,
+                "--startup", "DEFAULT",
+                "--startup", "PRINTING"
+            ]
+            if (project.findProperty("jshell.startup")) {
+                def jshellStartup = project.findProperty("jshell.startup")
+                jshellTask.logger.info(":jshell executing with --startup DEFAULT --startup PRINTING " +
+                                       "--startup \"{}\"", jshellStartup)
+                args = args + (String[]) ["--startup", jshellStartup]
+            } else {
+                def startupJsh = new File("${project.projectDir}/startup.jsh")
+                if (startupJsh.exists()) {
+                    def startupJshPath = startupJsh.absolutePath
+                    jshellTask.logger.info(":jshell executing with --startup DEFAULT --startup PRINTING" +
+                                           " --startup \"{}\"", startupJshPath)
+                    args = args + (String[]) ["--startup", startupJshPath]
+                } else {
+                    jshellTask.logger.info(":jshell did not find a startup.jsh script at the project dir " +
+                                           "nor a `jshell.startup` configuration")
+                }
+            }
+            JavaShellToolBuilder.builder().run(args)
         }
     }
 }

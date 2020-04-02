@@ -36,7 +36,7 @@ buildscript {
     }
   }
   dependencies {
-    classpath "com.github.mrsarm:jshell-plugin:1.0.0-RC1"
+    classpath "gradle.plugin.com.github.mrsarm:jshell-plugin:1.0.0-RC1"
   }
 }
 
@@ -90,6 +90,8 @@ arguments, like:
 Troubleshooting
 ---------------
 
+### JShell warning at startup
+
 If you see this warning and the jshell console does not detect your classes:
 
 > :jshell task :classes not found, be sure to compile the project first
@@ -101,6 +103,28 @@ in multi-modules projects, so you need to add it explicitly in the
 Gradle command:
 
     $ gradle --no-daemon --console plain classes jshell
+
+### I have a JDK 9+ installation but my default JDK is the JDK 8 or below
+
+In that case Gradle will try to use the default JDK, and `jshell` is
+not available in Java 8 and above. Moreover the steps to change the
+default JDK vary depending of your system, but Gradle use the default
+JDK except if it's defined the `$JAVA_HOME` environment variable,
+so when you enter in a new console where you need to use your Java 9+
+installation with Gradle, just export the variable with the path to
+the JDK installation, eg:
+
+    $ export JAVA_HOME="/usr/lib/jvm/java-11-openjdk-amd64"
+
+The export will live just whiting the session where is defined,
+it does not change your system configuration globally, and calling
+to `unset JAVA_HOME` or opening a new session the export will
+not have effect anymore.
+
+You can even create an alias in your `~/.profile` / `~/.bashrc`
+file like: `alias setjava9='export JAVA_HOME=/System/Library/Java/...'`
+to later switch easily to the other distribution calling
+`setjava9`.
 
 
 System Requirements
@@ -127,7 +151,7 @@ About
 
 This is a fork of the project https://github.com/bitterfox/jshell-gradle-plugin ,
 I forked it because the original project is not receiving patches
-and this version solve some issues and adds the following features:
+and this version solves some issues and adds the following features:
 
  - It works with **multi-module projects**
  - There is no need to set the env variable `JAVA_OPTS` with a bunch of

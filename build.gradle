@@ -34,7 +34,7 @@ pluginBundle {
 
     plugins {
         jshellPlugin {
-            id = 'com.mrsarm.jshell.plugin'
+            id = 'com.github.mrsarm.jshell.plugin'
             displayName = 'JShell Plugin'
         }
     }

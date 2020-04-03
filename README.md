@@ -145,6 +145,10 @@ Publish to your local Maven repo:
 
     $ ./gradlew publishToMavenLocal
 
+Publish to [plugins.gradle.org](https://plugins.gradle.org/):
+
+    $ ./gradlew publishPlugins
+
 
 About
 -----

@@ -49,7 +49,7 @@ dependencies after compiling your code.
 You need to run the task `jshell` with the options `--no-daemon --console plain`.
 Following is an example:
 
-    $ gradle --no-daemon --console plain jshell
+    $ gradle --console plain jshell
 
 Startup options
 ---------------
@@ -84,7 +84,7 @@ the startup script path with the project property
 or set the same property in the command line
 arguments, like: 
 
-    $ gradle --no-daemon --console plain jshell -Pjshell.startup=/path/to/run.jsh
+    $ gradle --console plain jshell -Pjshell.startup=/path/to/run.jsh
 
 
 Troubleshooting
@@ -102,7 +102,7 @@ the project, some times is the same `classes` task but is not detected
 in multi-modules projects, so you need to add it explicitly in the
 Gradle command:
 
-    $ gradle --no-daemon --console plain classes jshell
+    $ gradle --console plain classes jshell
 
 ### I have a JDK 9+ installation but my default JDK is the JDK 8 or below
 
@@ -125,6 +125,17 @@ You can even create an alias in your `~/.profile` / `~/.bashrc`
 file like: `alias setjava9='export JAVA_HOME=/System/Library/Java/...'`
 to later switch easily to the other distribution calling
 `setjava9`.
+
+### Gradle output is print with the jshell output in the console
+
+If content like `<-------------> 0% EXECUTING [16s]` is mixed
+in the console with the jshell output each time you try
+to execute something within the jshell console, remember to pass
+the option `--console plain` to the gradle command, but if
+the output continues mixed up with Gradle messages, try
+adding the option `--no-daemon` to start up the jshell:
+
+    $ gradle --no-daemon --console plain jshell
 
 
 System Requirements

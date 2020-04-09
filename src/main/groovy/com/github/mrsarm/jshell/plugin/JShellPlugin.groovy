@@ -35,11 +35,11 @@ class JShellPlugin implements Plugin<Project> {
         jshellTask.doLast {
             Set pathSet = []
             project.tasks.withType(JavaExec) {
-                pathSet.addAll(classpath.findAll{ it.exists() })
+                pathSet.addAll(classpath.findAll { it.exists() })
             }
             project.subprojects.each {
                 it.tasks.withType(JavaExec) {
-                    pathSet.addAll(classpath.findAll{ it.exists() })
+                    pathSet.addAll(classpath.findAll { it.exists() })
                 }
             }
             Thread.currentThread().setContextClassLoader(ClassLoader.getSystemClassLoader()) // promote class loader
@@ -50,12 +50,16 @@ class JShellPlugin implements Plugin<Project> {
                 "--startup", "DEFAULT",
                 "--startup", "PRINTING"
             ]
-            if (project.findProperty("jshell.startup")) {
+            if (project.findProperty("jshell.startup") == "") {
+                // Nothing, just avoid to run the startup.jsh if exists
+            }
+            else if (project.findProperty("jshell.startup")) {
                 def jshellStartup = project.findProperty("jshell.startup")
                 jshellTask.logger.info(":jshell executing with --startup DEFAULT --startup PRINTING " +
                                        "--startup \"{}\"", jshellStartup)
                 args = args + (String[]) ["--startup", jshellStartup]
-            } else {
+            }
+            else {
                 def startupJsh = new File("${project.projectDir}/startup.jsh")
                 if (startupJsh.exists()) {
                     def startupJshPath = startupJsh.absolutePath

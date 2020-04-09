@@ -9,6 +9,7 @@ Hosted on _(release candidate)_: https://plugins.gradle.org/plugin/com.github.mr
 
  - [Getting started](#getting-started)
  - [Startup options](#startup-options)
+ - [Spring Boot applications](#spring-boot-applications)
  - [Troubleshooting](#troubleshooting)
  - [System Requirements](#system-requirements)
  - [Build and Publish](#build-an-publish)
@@ -22,7 +23,7 @@ To use this plugin, add the following to your `build.gradle`:
 
 ```groovy
 plugins {
-  id "com.github.mrsarm.jshell.plugin" version "1.0.0-RC1"
+  id "com.github.mrsarm.jshell.plugin" version "1.0.0-RC2"
 }
 ```
 
@@ -36,7 +37,7 @@ buildscript {
     }
   }
   dependencies {
-    classpath "gradle.plugin.com.github.mrsarm:jshell-plugin:1.0.0-RC1"
+    classpath "gradle.plugin.com.github.mrsarm:jshell-plugin:1.0.0-RC2"
   }
 }
 
@@ -85,6 +86,109 @@ or set the same property in the command line
 arguments, like: 
 
     $ gradle --console plain jshell -Pjshell.startup=/path/to/run.jsh
+
+If you have a `startup.jsh` script at the root of the project
+but at some point you don't want to execute it nor any other
+startup script, just pass the `jshell.startup` property with an empty
+value: `gradle --console plain jshell -Pjshell.startup= -Pjshell.startup=`.
+
+Spring Boot applications
+------------------------
+
+The JShell plugin allows to startup a Spring Boot application
+within the console and access to the business object from there,
+but you will need to do some extra configurations, and add
+a dependency to the project to make easier to access
+to the Spring beans.
+
+1. Setup the plugin following the steps in the
+   [Getting started](#getting-started) section.
+
+2. Add the library [spring-ctx](https://github.com/mrsarm/spring-ctx)
+   to your dependencies as follows:
+
+   - Add the following dependency to your `dependencies` section:
+     
+     ```groovy
+     implementation 'com.github.mrsarm:spring-ctx:1.0.0'
+     ```
+
+   - At the end of the `repositories` section:
+
+     ```groovy
+     maven { url 'https://jitpack.io' }
+     ```
+
+3. Any Spring Boot application has a class annotated with
+   `@SpringBootApplication` that is the starting point of
+   the application, with a `public static void main(String[] args)`
+   method, you need to create a [startup.jsh](#startup-options) file
+   at the root of your project calling that method, eg:
+
+   ```java
+   com.my.package.MyApplication.main(new String).main(new String[]{})
+   ```
+
+   You can also add the imports of the business class you are going
+   to play with, as many as you have, otherwise you can import them
+   once the JShell started:
+
+   ```java
+   import com.my.package.services.MyUserService
+   ```
+
+4. Done. You can start playing with your Spring application, you can
+   access to the bean objects once the JShell started as
+   following:
+
+   ```
+   ./gradlew --console plain jshell
+   
+     .   ____          _            __ _ _
+    /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+   ( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+    \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+     '  |____| .__|_| |_|_| |_\__, | / / / /
+    =========|_|==============|___/=/_/_/_/
+    :: Spring Boot ::        (v2.2.4.RELEASE)
+   
+   14:43:28.320  INFO com.my.package.MyApplication             : Starting Application on kubu1910 with PID 5225 (/projects/...
+   14:43:28.323 DEBUG com.my.package.MyApplication             : Running with Spring Boot v2.2.4.RELEASE, Spring v5.2.3.RELEASE
+   14:43:28.324  INFO com.my.package.MyApplication             : The following profiles are active: ...
+   14:43:30.229  INFO boot.web.embedded.tomcat.TomcatWebServer : Tomcat initialized with port(s): 8010 (http)
+   
+   ...
+   ...
+   
+   14:43:33.729  INFO tuate.endpoint.web.EndpointLinksResolver : Exposing 3 endpoint(s) beneath base path ''
+   14:43:33.811  INFO boot.web.embedded.tomcat.TomcatWebServer : Tomcat started on port(s): 8010 (http) with context path ''
+   14:43:33.816  INFO com.my.package.MyApplication             : Started Application in 6.995 seconds (JVM running for 10.524)
+   
+   > Task :jshell
+   |  Welcome to JShell -- Version 11.0.6
+   |  For an introduction type: /help intro
+   
+   jshell> var myUserService = ctx.App.getBean(MyUserService.class)
+   
+   jshell> ctx.App.ppjson(myUserService.getByUsername("admin"))
+   {
+     "name" : "Jhon",
+     "lastName" : "Due",
+     "username" : "admin",
+     "age" : null
+   }
+   ```
+
+   You can add to the `startup.jsh` not just the call to the `main` method
+   and useful imports, but also adds the bean declarations you are
+   going to use most like `var myUserService = ctx.App.getBean(MyUserService.class)`,
+   or any other snippet of Java code that may save you time
+   running each time the JShell.
+
+   The class `ctx.App` comes from the `spring-ctx` dependency added, checkout the
+   [documentation](https://github.com/mrsarm/spring-ctx/blob/master/README.md)
+   of all the useful methods it has to help you to play with
+   the Spring framework.
 
 
 Troubleshooting
@@ -172,7 +276,7 @@ and this version solves some issues and adds the following features:
  - There is no need to set the env variable `JAVA_OPTS` with a bunch of
    of arguments _"--add-exports jdk.jshell/jdk.intern..."_
  - It allows to run at the beginning of the session a _.jsh_ startup script
- - _Coming soon_: special support to the **Spring Framework**
+ - Special support to the **Spring Framework**
 
 Project: https://github.com/mrsarm/jshell-plugin
 

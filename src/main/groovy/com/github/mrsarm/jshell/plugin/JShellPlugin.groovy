@@ -25,6 +25,8 @@ class JShellPlugin implements Plugin<Project> {
     @Override
     void apply(Project project) {
         def jshellTask = project.tasks.create('jshell')
+        jshellTask.group = 'application'
+        jshellTask.description = 'Runs a JShell session with all the code and dependencies.'
         def classesTask = project.tasks.find { it.name == "classes" }
         if (classesTask) {
             jshellTask.dependsOn classesTask

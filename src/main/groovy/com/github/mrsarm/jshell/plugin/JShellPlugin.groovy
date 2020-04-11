@@ -28,11 +28,12 @@ class JShellPlugin implements Plugin<Project> {
         def classesTask = project.tasks.find { it.name == "classes" }
         if (classesTask) {
             jshellTask.dependsOn classesTask
-        } else {
-            // Some multi-module projects may not have the :classes task
-            jshellTask.logger.warn ":jshell task :classes not found, be sure to compile the project first"
         }
         jshellTask.doLast {
+            if (!jshellTask.dependsOn) {
+                // Some multi-module projects may not have the :classes task
+                jshellTask.logger.warn ":jshell task :classes not found, be sure to compile the project first"
+            }
             Set pathSet = []
             project.tasks.withType(JavaExec) {
                 pathSet.addAll(classpath.findAll { it.exists() })

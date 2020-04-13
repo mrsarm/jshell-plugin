@@ -18,15 +18,19 @@ package com.github.mrsarm.jshell.plugin
 import jdk.jshell.tool.JavaShellToolBuilder
 import org.gradle.api.Plugin
 import org.gradle.api.Project
+import org.gradle.api.Task
 import org.gradle.api.tasks.JavaExec
 
 class JShellPlugin implements Plugin<Project> {
 
-    @Override
-    void apply(Project project) {
-        def jshellTask = project.tasks.create('jshell')
-        jshellTask.group = 'application'
-        jshellTask.description = 'Runs a JShell session with all the code and dependencies.'
+    private String[] shellArgs
+
+    // This task could be merged with the main task in just one,
+    // the problem is that the main task is a JavaExec one,
+    // and at least for now I couldn't find a way
+    // to get the dependencies list with this type
+    private Task createJshellSetupTask(Project project) {
+        Task jshellTask = project.tasks.create('jshellSetup')
         def classesTask = project.tasks.find { it.name == "classes" }
         if (classesTask) {
             jshellTask.dependsOn classesTask
@@ -45,10 +49,9 @@ class JShellPlugin implements Plugin<Project> {
                     pathSet.addAll(classpath.findAll { it.exists() })
                 }
             }
-            Thread.currentThread().setContextClassLoader(ClassLoader.getSystemClassLoader()) // promote class loader
             def path = pathSet.join(System.properties['os.name'].toLowerCase().contains('windows') ? ';' : ':')
             jshellTask.logger.info(":jshell executing with --class-path \"{}\"", path)
-            String[] args = [
+            shellArgs = [
                 "--class-path", path,
                 "--startup", "DEFAULT",
                 "--startup", "PRINTING"
@@ -60,7 +63,7 @@ class JShellPlugin implements Plugin<Project> {
                 def jshellStartup = project.findProperty("jshell.startup")
                 jshellTask.logger.info(":jshell executing with --startup DEFAULT --startup PRINTING " +
                                        "--startup \"{}\"", jshellStartup)
-                args = args + (String[]) ["--startup", jshellStartup]
+                shellArgs = shellArgs + (String[]) ["--startup", jshellStartup]
             }
             else {
                 def startupJsh = new File("${project.projectDir}/startup.jsh")
@@ -68,13 +71,26 @@ class JShellPlugin implements Plugin<Project> {
                     def startupJshPath = startupJsh.absolutePath
                     jshellTask.logger.info(":jshell executing with --startup DEFAULT --startup PRINTING" +
                                            " --startup \"{}\"", startupJshPath)
-                    args = args + (String[]) ["--startup", startupJshPath]
+                    shellArgs = shellArgs + (String[]) ["--startup", startupJshPath]
                 } else {
                     jshellTask.logger.info(":jshell did not find a startup.jsh script at the project dir " +
                                            "nor a `jshell.startup` configuration")
                 }
             }
-            JavaShellToolBuilder.builder().run(args)
+        }
+        return jshellTask
+    }
+
+    @Override
+    void apply(Project project) {
+        Task jshellSetupTask = createJshellSetupTask(project)
+        Task jshellTask = project.tasks.create('jshell')
+        jshellTask.group = 'application'
+        jshellTask.description = 'Runs a JShell session with all the code and dependencies.'
+        jshellTask.dependsOn jshellSetupTask
+        jshellTask.doLast {
+            Thread.currentThread().setContextClassLoader(ClassLoader.getSystemClassLoader()) // promote class loader
+            JavaShellToolBuilder.builder().run(shellArgs)
         }
     }
 }

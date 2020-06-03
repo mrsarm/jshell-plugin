@@ -23,7 +23,7 @@ To use this plugin, add the following to your `build.gradle`:
 
 ```groovy
 plugins {
-  id "com.github.mrsarm.jshell.plugin" version "1.0.0-RC2"
+  id "com.github.mrsarm.jshell.plugin" version "1.0.0"
 }
 ```
 
@@ -37,7 +37,7 @@ buildscript {
     }
   }
   dependencies {
-    classpath "gradle.plugin.com.github.mrsarm:jshell-plugin:1.0.0-RC2"
+    classpath "gradle.plugin.com.github.mrsarm:jshell-plugin:1.0.0"
   }
 }
 
@@ -90,7 +90,7 @@ arguments, like:
 If you have a `startup.jsh` script at the root of the project
 but at some point you don't want to execute it nor any other
 startup script, just pass the `jshell.startup` property with an empty
-value: `gradle --console plain jshell -Pjshell.startup= -Pjshell.startup=`.
+value: `gradle --console plain jshell -Pjshell.startup=`.
 
 Spring Boot applications
 ------------------------
@@ -129,7 +129,7 @@ to the Spring beans.
    com.my.package.MyApplication.main(new String).main(new String[]{})
    ```
 
-   You can also add the imports of the business class you are going
+   You can also add the imports of the business classes you are going
    to play with, as many as you have, otherwise you can import them
    once the JShell started:
 
@@ -181,9 +181,9 @@ to the Spring beans.
 
    You can add to the `startup.jsh` not just the call to the `main` method
    and useful imports, but also adds the bean declarations you are
-   going to use most like `var myUserService = ctx.App.getBean(MyUserService.class)`,
-   or any other snippet of Java code that may save you time
-   running each time the JShell.
+   going to use most likely, eg.
+   `var myUserService = ctx.App.getBean(MyUserService.class)`, or any other
+   snippet of Java code that may save you time running each time the JShell.
 
    The class `ctx.App` comes from the `spring-ctx` dependency added, checkout the
    [documentation](https://github.com/mrsarm/spring-ctx/blob/master/README.md)
@@ -208,7 +208,7 @@ Gradle command:
 
     $ gradle --console plain classes jshell
 
-### I have a JDK 9+ installation but my default JDK is the JDK 8 or below
+### I have a JDK 9+ installation, but my default JDK is the JDK 8 or below
 
 In that case Gradle will try to use the default JDK, and `jshell` is
 not available in Java 8 and above. Moreover the steps to change the
@@ -228,9 +228,9 @@ not have effect anymore.
 You can even create an alias in your `~/.profile` / `~/.bashrc`
 file like: `alias setjava9='export JAVA_HOME=/System/Library/Java/...'`
 to later switch easily to the other distribution calling
-`setjava9`.
+`setjava9`, or `setjava8` to switch back.
 
-### Gradle output is print with the jshell output in the console
+### Gradle output is mixed with the jshell output in the console
 
 If content like `<-------------> 0% EXECUTING [16s]` is mixed
 in the console with the jshell output each time you try
@@ -240,6 +240,13 @@ the output continues mixed up with Gradle messages, try
 adding the option `--no-daemon` to start up the jshell:
 
     $ gradle --no-daemon --console plain jshell
+
+### Tab completion not working
+
+Auto-completion does not work, and pressing arrow keys triggers
+weird characters in the console. Unfortunately, with the
+current console support from Gradle, there is no
+solution for this [bug](https://github.com/mrsarm/jshell-plugin/issues/2).
 
 
 System Requirements
@@ -273,7 +280,7 @@ I forked it because the original project is not receiving patches
 and this version solves some issues and adds the following features:
 
  - It works with **multi-module projects**
- - There is no need to set the env variable `JAVA_OPTS` with a bunch of
+ - There is no need to set the env variable `JAVA_OPTS` with a bunch
    of arguments _"--add-exports jdk.jshell/jdk.intern..."_
  - It allows to run at the beginning of the session a _.jsh_ startup script
  - Special support to the **Spring Framework**

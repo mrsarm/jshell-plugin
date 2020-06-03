@@ -5,7 +5,7 @@ This **Gradle plugin** helps you to explore your code and dependencies in your g
 with in [jshell](https://docs.oracle.com/javase/9/jshell/introduction-jshell.htm),
 the official Java REPL tool.
 
-Hosted on _(release candidate)_: https://plugins.gradle.org/plugin/com.github.mrsarm.jshell.plugin
+**Hosted on**: https://plugins.gradle.org/plugin/com.github.mrsarm.jshell.plugin
 
  - [Getting started](#getting-started)
  - [Startup options](#startup-options)

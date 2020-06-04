@@ -126,7 +126,7 @@ to the Spring beans.
    at the root of your project calling that method, eg:
 
    ```java
-   com.my.package.MyApplication.main(new String).main(new String[]{})
+   com.my.package.MyApplication.main(new String[]{})
    ```
 
    You can also add the imports of the business classes you are going

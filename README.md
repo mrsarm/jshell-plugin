@@ -47,10 +47,22 @@ apply plugin: "com.github.mrsarm.jshell.plugin"
 Task `jshell` is now enabled, which execute jshell with your classes and
 dependencies after compiling your code.
 
-You need to run the task `jshell` with the options `--no-daemon --console plain`.
+You need to run the task `jshell` with the option `--console plain`.
 Following is an example:
 
     $ gradle --console plain jshell
+    
+    ... (gradle tasks output) ...
+    
+    > Task :jshell
+    |  Welcome to JShell -- Version 11.0.6
+    |  For an introduction type: /help intro
+    
+    jshell> println("Hello world!")
+    Hello world!
+    
+    jshell> _
+
 
 Startup options
 ---------------
@@ -259,11 +271,12 @@ System Requirements
 Build and Publish
 -----------------
 
-Compile and build the .jar locally with:
+To compile this plugin and build the .jar locally, checkout the
+source code and execute:
 
     $ ./gradlew build
 
-Publish to your local Maven repo:
+Publish to your local Maven repo (normally `~/.m2/repository/`):
 
     $ ./gradlew publishToMavenLocal
 

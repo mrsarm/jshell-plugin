@@ -154,7 +154,7 @@ to the Spring beans.
    following:
 
    ```
-   ./gradlew --console plain jshell
+   $ ./gradlew --console plain jshell
    
      .   ____          _            __ _ _
     /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \

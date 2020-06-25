@@ -284,6 +284,29 @@ Publish to [plugins.gradle.org](https://plugins.gradle.org/):
 
     $ ./gradlew publishPlugins
 
+### Using from local repo
+
+To test local changes published to the local repo with the
+`publishToMavenLocal` task mentioned above, you need
+to add the plugin to the `build.gradle` in the project
+where the plugin is tested in the following manner: 
+
+```groovy
+buildscript {
+  repositories {
+    mavenLocal()
+    maven {
+      url "https://plugins.gradle.org/m2/"
+    }
+  }
+  dependencies {
+    classpath "com.github.mrsarm:jshell-plugin:1.0.0"
+  }
+}
+
+apply plugin: "com.github.mrsarm.jshell.plugin"
+```
+
 
 About
 -----

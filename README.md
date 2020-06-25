@@ -2,8 +2,8 @@ JShell Plugin
 =============
 
 > :warning: the plugin is not working properly with Java 12+, check this
-> [section](#the-console-is-exited-once-started), so use it with
-> Java 9 - 11 (11 is a LTS version, use it! :point_left:), check also how to deal with
+> [section](#the-console-is-exited-once-started), although it works with
+> Java 9 to 11 (version 11 is LTS, use it! :point_left:), check also how to deal with
 > different versions of Java [here](#i-have-a-jdk-9-installation-but-my-default-jdk-is-the-jdk-8-or-below).
 
 This **Gradle plugin** helps you to explore your code and dependencies in your gradle project
@@ -89,20 +89,21 @@ the following imports and functions are available:
  - print (alias of `System.out.print`)
  - println (alias of `System.out.println`)
 
-### JShell Script
+### JShell scripts
 
 If the plugin founds at the root of the project a
 [JShell Script](https://docs.oracle.com/javase/9/jshell/scripts.htm)
 named `startup.jsh`, it will append to the JShell session
 the argument `--startup startup.jsh`, executing
-at the beginning all the instruction in the script,
+at the beginning all the instructions in the script,
 so you can add there all the imports, object definitions
 or any Java instruction that you want to execute
-at the begging of the session. You can override
-the startup script path with the project property
-`jshell.startup` in the `gradle.properties` file,
-or set the same property in the command line
-arguments, like: 
+at the beginning of the session.
+
+You can override the startup script path with the project
+property `jshell.startup` in the `gradle.properties` file,
+or set the same property directly in the command line
+arguments: 
 
     $ gradle --console plain jshell -Pjshell.startup=/path/to/run.jsh
 
@@ -110,6 +111,7 @@ If you have a `startup.jsh` script at the root of the project
 but at some point you don't want to execute it nor any other
 startup script within the session, just pass the `jshell.startup` property
 with an empty value: `gradle --console plain jshell -Pjshell.startup=`.
+
 
 Spring Boot applications
 ------------------------
@@ -215,17 +217,21 @@ Troubleshooting
 
 ### JShell warning at startup
 
-If you see this warning and the jshell console does not detect your classes:
+If you see this warning before the jshell console starts:
 
 > :jshell task :classes not found, be sure to compile the project first
 
 Means the `classes` task needed to compile your project before launch `jshell`
 does not exist, just append in the command line the task needed to compile
-the project, some times is the same `classes` task but is not detected
+the project. Some times is the same `classes` task but is not detected
 in multi-modules projects, so you need to add it explicitly in the
 Gradle command:
 
     $ gradle --console plain classes jshell
+
+Later if you need to run again the JShell but no change to the
+source code was performed, you don't need to append the `classes` task,
+although the warning will still appear, just ignore it.
 
 ### The console is exited once started
 
@@ -253,11 +259,11 @@ the interactive console as following:
 It's recommended to **use the latest LTS: version 11**, but it works
 with Java 9 and 10 as well. Previous versions (Java 8, 7...) are not
 supported because the JShell is not built-in on those versions, but
-if you want to run the JShell with an old project, paid special attention
+if you want to run the JShell with an old project, pay special attention
 to the section bellow.
 
 Although if you cannot run with a version bellow to Java 12, you are
-still able to run [JShell Scripts](#jshell-script) with the plugin,
+still able to run [JShell scripts](#jshell-scripts) with the plugin,
 but once executed the _.jsh_ script the interactive console will exit.
 
 ### I have a JDK 9+ installation, but my default JDK is the JDK 8 or below
@@ -278,9 +284,14 @@ to `unset JAVA_HOME` or opening a new session the export will
 not have effect anymore.
 
 You can even create an alias in your `~/.profile` / `~/.bashrc`
-file like: `alias setjava9='export JAVA_HOME=/System/Library/Java/...'`
+file like: `alias usejava9='export JAVA_HOME=/System/Library/Java/...'`
 to later switch easily to the other distribution calling
-`setjava9`, or `setjava8` to switch back.
+`usejava9`, or `usejava8` to switch back.
+
+Another good alternative to install and switch between different
+versions of Java is [SdkMan!](https://sdkman.io/), totally recommended,
+and it also allows to install multiple versions of Gradle, Maven, Kotlin...
+and many Java based tools.
 
 ### Gradle output is mixed with the jshell output in the console
 
@@ -324,12 +335,12 @@ Publish to [plugins.gradle.org](https://plugins.gradle.org/):
 
     $ ./gradlew publishPlugins
 
-### Using from local repo
+### Using from the local repo
 
 To test local changes published to the local repo with the
 `publishToMavenLocal` task mentioned above, you need
 to add the plugin to the `build.gradle` in the project
-where the plugin is tested in the following manner: 
+where the plugin is tested, in the following manner: 
 
 ```groovy
 buildscript {
@@ -361,7 +372,7 @@ and this version solves some issues and adds the following features:
  - It allows to run at the beginning of the session a _.jsh_ startup script
  - Special support to the **Spring Framework**
 
-Project: https://github.com/mrsarm/jshell-plugin
+**Project**: https://github.com/mrsarm/jshell-plugin
 
 ### Authors
 

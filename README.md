@@ -1,18 +1,23 @@
 JShell Plugin
 =============
 
+> :warning: the plugin is not working properly with Java 12+, check this
+> [section](#the-console-is-exited-once-started), so use it with
+> Java 9 - 11 (11 is a LTS version, use it! :point_left:), check also how to deal with
+> different versions of Java [here](#i-have-a-jdk-9-installation-but-my-default-jdk-is-the-jdk-8-or-below).
+
 This **Gradle plugin** helps you to explore your code and dependencies in your gradle project
 with in [jshell](https://docs.oracle.com/javase/9/jshell/introduction-jshell.htm),
 the official Java REPL tool.
 
-**Hosted on**: https://plugins.gradle.org/plugin/com.github.mrsarm.jshell.plugin
+Hosted in the **Gradle plugins** site: https://plugins.gradle.org/plugin/com.github.mrsarm.jshell.plugin
 
  - [Getting started](#getting-started)
  - [Startup options](#startup-options)
  - [Spring Boot applications](#spring-boot-applications)
  - [Troubleshooting](#troubleshooting)
  - [System Requirements](#system-requirements)
- - [Build and Publish](#build-an-publish)
+ - [Build and Publish](#build-and-publish)
  - [About](#about)
 
 
@@ -84,6 +89,8 @@ the following imports and functions are available:
  - print (alias of `System.out.print`)
  - println (alias of `System.out.println`)
 
+### JShell Script
+
 If the plugin founds at the root of the project a
 [JShell Script](https://docs.oracle.com/javase/9/jshell/scripts.htm)
 named `startup.jsh`, it will append to the JShell session
@@ -101,8 +108,8 @@ arguments, like:
 
 If you have a `startup.jsh` script at the root of the project
 but at some point you don't want to execute it nor any other
-startup script, just pass the `jshell.startup` property with an empty
-value: `gradle --console plain jshell -Pjshell.startup=`.
+startup script within the session, just pass the `jshell.startup` property
+with an empty value: `gradle --console plain jshell -Pjshell.startup=`.
 
 Spring Boot applications
 ------------------------
@@ -219,6 +226,39 @@ in multi-modules projects, so you need to add it explicitly in the
 Gradle command:
 
     $ gradle --console plain classes jshell
+
+### The console is exited once started
+
+Currently, there is an [issue#1](https://github.com/mrsarm/jshell-plugin/issues/1)
+(and [issue#4](https://github.com/mrsarm/jshell-plugin/issues/4)) that
+the plugin does not work properly with Java 12 and above, exiting
+the interactive console as following:
+
+    $ ./gradlew --console plain jshell
+    > Task :compileJava UP-TO-DATE
+    > Task :processResources NO-SOURCE
+    > Task :classes UP-TO-DATE
+    
+    > Task :jshellSetup
+    
+    > Task :jshell
+    |  Welcome to JShell -- Version 12.0.2
+    |  For an introduction type: /help intro
+    
+    BUILD SUCCESSFUL in 1s
+    3 actionable tasks: 2 executed, 1 up-to-date
+
+    $ _
+
+It's recommended to **use the latest LTS: version 11**, but it works
+with Java 9 and 10 as well. Previous versions (Java 8, 7...) are not
+supported because the JShell is not built-in on those versions, but
+if you want to run the JShell with an old project, paid special attention
+to the section bellow.
+
+Although if you cannot run with a version bellow to Java 12, you are
+still able to run [JShell Scripts](#jshell-script) with the plugin,
+but once executed the _.jsh_ script the interactive console will exit.
 
 ### I have a JDK 9+ installation, but my default JDK is the JDK 8 or below
 

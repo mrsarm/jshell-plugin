@@ -1,14 +1,9 @@
 JShell Plugin
 =============
 
-> :warning: the plugin is not working properly with Java 12+, check this
-> [section](#the-console-is-exited-once-started), although it works with
-> Java 9 to 11 (version 11 is LTS, use it! :point_left:), check also how to deal with
-> different versions of Java [here](#i-have-a-jdk-9-installation-but-my-default-jdk-is-the-jdk-8-or-below).
-
-This **Gradle plugin** helps you to explore your code and dependencies in your gradle project
+**Gradle plugin** that helps you to explore your code and dependencies in your gradle project
 with in [jshell](https://docs.oracle.com/javase/9/jshell/introduction-jshell.htm),
-the official Java REPL tool.
+the official Java REPL tool (Java 9+).
 
 Hosted in the **Gradle plugins** site: https://plugins.gradle.org/plugin/com.github.mrsarm.jshell.plugin
 
@@ -32,24 +27,7 @@ plugins {
 }
 ```
 
-or in Gradle < 2.1:
-
-```groovy
-buildscript {
-  repositories {
-    maven {
-      url "https://plugins.gradle.org/m2/"
-    }
-  }
-  dependencies {
-    classpath "gradle.plugin.com.github.mrsarm:jshell-plugin:1.0.0"
-  }
-}
-
-apply plugin: "com.github.mrsarm.jshell.plugin"
-```
-
-Task `jshell` is now enabled, which execute jshell with your classes and
+Task `jshell` is now enabled, which execute the jshell with your classes and
 dependencies after compiling your code.
 
 You need to run the task `jshell` with the option `--console plain`.
@@ -103,7 +81,7 @@ at the beginning of the session.
 You can override the startup script path with the project
 property `jshell.startup` in the `gradle.properties` file,
 or set the same property directly in the command line
-arguments: 
+arguments:
 
     $ gradle --console plain jshell -Pjshell.startup=/path/to/run.jsh
 
@@ -280,7 +258,7 @@ the JDK installation, eg:
 
 The export will live just whiting the session where is defined,
 it does not change your system configuration globally, and calling
-to `unset JAVA_HOME` or opening a new session the export will
+`unset JAVA_HOME` or opening a new session the export will
 not have effect anymore.
 
 You can even create an alias in your `~/.profile` / `~/.bashrc`
@@ -321,6 +299,9 @@ System Requirements
 
 Build and Publish
 -----------------
+
+> :information_source: Only for developers that want to make
+> changes to this source code.
 
 To compile this plugin and build the .jar locally, checkout the
 source code and execute:
@@ -366,11 +347,11 @@ This is a fork of the project https://github.com/bitterfox/jshell-gradle-plugin 
 I forked it because the original project is not receiving patches
 and this version solves some issues and adds the following features:
 
- - It works with **multi-module projects**
+ - It works with **multi-module projects**.
  - There is no need to set the env variable `JAVA_OPTS` with a bunch
-   of arguments _"--add-exports jdk.jshell/jdk.intern..."_
- - It allows to run at the beginning of the session a _.jsh_ startup script
- - Special support to the **Spring Framework**
+   of arguments _"--add-exports jdk.jshell/jdk.intern..."_.
+ - It allows to run at the beginning of the session a _.jsh_ startup script.
+ - Special support to the **Spring Framework**.
 
 **Project**: https://github.com/mrsarm/jshell-plugin
 
@@ -382,4 +363,4 @@ and this version solves some issues and adds the following features:
 
 ### License
 
- - (2020) [Apache Software License 2.0](https://www.apache.org/licenses/LICENSE-2.0).
+ - (2020-2021) [Apache Software License 2.0](https://www.apache.org/licenses/LICENSE-2.0).

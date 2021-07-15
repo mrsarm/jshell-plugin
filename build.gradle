@@ -1,26 +1,24 @@
 plugins {
-    id 'com.gradle.plugin-publish' version '0.11.0'
+    id 'com.gradle.plugin-publish' version '0.15.0'
     id 'maven-publish'
     id 'groovy'
     id 'java-library'
 }
 
 group 'com.github.mrsarm'
-version '1.0.0'
+version '1.1.0'
 
 sourceCompatibility = 9
 targetCompatibility = 9
 
 repositories {
     mavenCentral()
-    jcenter()
 }
 
 dependencies {
-    compile gradleApi()
-    compile localGroovy()
+    implementation gradleApi()
+    implementation localGroovy()
 }
-jar.baseName = 'jshell-plugin'
 
 tasks.withType(GroovyCompile) {
     options.fork = false

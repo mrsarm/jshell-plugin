@@ -23,7 +23,7 @@ To use this plugin, add the following to your `build.gradle`:
 
 ```groovy
 plugins {
-  id "com.github.mrsarm.jshell.plugin" version "1.0.0"
+  id "com.github.mrsarm.jshell.plugin" version "1.1.0"
 }
 ```
 
@@ -332,7 +332,7 @@ buildscript {
     }
   }
   dependencies {
-    classpath "com.github.mrsarm:jshell-plugin:1.0.0"
+    classpath "com.github.mrsarm:jshell-plugin:1.1.0"
   }
 }
 

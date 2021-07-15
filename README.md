@@ -289,6 +289,15 @@ weird characters in the console. Unfortunately, with the
 current console support from Gradle, there is no
 solution for this [bug](https://github.com/mrsarm/jshell-plugin/issues/2).
 
+However, the JShell task can be invoked with the command **rlwrap** from the
+console to overcome the issue:
+
+    $ rlwrap ./gradlew --console plain jshell
+
+`rlwrap` takes care of the autocompletion, and the arrow keys management.
+Just remember to check you have installed it before invoking the JShell with
+the command the first time.
+
 
 System Requirements
 -------------------

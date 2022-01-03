@@ -57,7 +57,8 @@ class JShellPlugin implements Plugin<Project> {
                 jshellTask.logger.info(":jshell couldn't find the classpath, adding " +
                                        'the following paths from project sourceSets: {}', classesPaths)
                 pathSet.addAll(classesPaths)
-                List<String> depsPaths = project.configurations.default.collect { it.getPath() }
+                List<String> depsPaths = project.configurations.compileClasspath.collect { it.getPath() }
+                depsPaths.addAll(project.configurations.runtimeClasspath.collect { it.getPath() })
                 jshellTask.logger.info(":jshell couldn't find the dependencies' classpath, adding " +
                                        'the following paths from project configurations: {}', depsPaths)
                 pathSet.addAll(depsPaths)

@@ -1,5 +1,5 @@
 /*
- * Copyright 2020-2021 the original author or authors.
+ * Copyright 2020-2022 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,7 +33,10 @@ class JShellPlugin implements Plugin<Project> {
         Task jshellTask = project.tasks.create('jshellSetup')
         def classesTask = project.tasks.find { it.name == "classes" }
         if (classesTask) {
+            jshellTask.logger.info 'Task "classes" found.'
             jshellTask.dependsOn classesTask
+        } else {
+            jshellTask.logger.warn 'Task "classes" NOT found.'
         }
         jshellTask.doLast {
             if (!jshellTask.dependsOn) {
@@ -49,15 +52,26 @@ class JShellPlugin implements Plugin<Project> {
                     pathSet.addAll(classpath.findAll { it.exists() })
                 }
             }
+            if (pathSet.isEmpty()) {
+                List<String> classesPaths = project.sourceSets.main.output.getClassesDirs().collect { it.getPath() }
+                jshellTask.logger.info(':jshell could not find the classpath, adding ' +
+                                       'the following paths from project sourceSets: {}', classesPaths)
+                pathSet.addAll(classesPaths)
+                List<String> depsPaths = project.configurations.compileClasspath.collect { it.getPath() }
+                depsPaths.addAll(project.configurations.runtimeClasspath.collect { it.getPath() })
+                jshellTask.logger.info(":jshell could not find the dependencies' classpath, adding " +
+                                       'the following paths from project configurations: {}', depsPaths)
+                pathSet.addAll(depsPaths)
+            }
             def path = pathSet.join(System.getProperty("path.separator"))
-            jshellTask.logger.info(":jshell executing with --class-path \"{}\"", path)
+            jshellTask.logger.info(":jshell executing with --class-path {}", path)
             shellArgs += [
                 "--class-path", path,
                 "--startup", "DEFAULT",
                 "--startup", "PRINTING"
             ]
             if (project.findProperty("jshell.startup") == "") {
-                // Nothing, just avoid to run the startup.jsh if exists
+                jshellTask.logger.info ':jshell "jshell.startup" set to empty, skipping "startup.jsh" execution'
             }
             else if (project.findProperty("jshell.startup")) {
                 def jshellStartup = project.findProperty("jshell.startup")

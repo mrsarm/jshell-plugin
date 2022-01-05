@@ -23,7 +23,7 @@ To use this plugin, add the following to your `build.gradle`:
 
 ```groovy
 plugins {
-  id "com.github.mrsarm.jshell.plugin" version "1.1.0"
+  id "com.github.mrsarm.jshell.plugin" version "1.2.0"
 }
 ```
 
@@ -341,13 +341,15 @@ buildscript {
     }
   }
   dependencies {
-    classpath "com.github.mrsarm:jshell-plugin:1.1.0"
+    classpath "com.github.mrsarm:jshell-plugin:1.2.0"
   }
 }
 
 apply plugin: "com.github.mrsarm.jshell.plugin"
 ```
 
+Also, when launching the plugin from another project, to see the ":jshell" logs
+add the `--info` argument in the command line, e.g.: `gradle --console plain jshell --info`.
 
 About
 -----
@@ -372,4 +374,4 @@ and this version solves some issues and adds the following features:
 
 ### License
 
- - (2020-2021) [Apache Software License 2.0](https://www.apache.org/licenses/LICENSE-2.0).
+ - (2020-2022) [Apache Software License 2.0](https://www.apache.org/licenses/LICENSE-2.0).

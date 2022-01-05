@@ -1,12 +1,12 @@
 plugins {
-    id 'com.gradle.plugin-publish' version '0.15.0'
+    id 'com.gradle.plugin-publish' version '0.19.0'
     id 'maven-publish'
     id 'groovy'
     id 'java-library'
 }
 
 group 'com.github.mrsarm'
-version '1.1.0'
+version '1.2.0'
 
 sourceCompatibility = 9
 targetCompatibility = 9

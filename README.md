@@ -298,6 +298,9 @@ console to overcome the issue:
 Just remember to check you have installed it before invoking the JShell with
 the command the first time.
 
+You can install [rlwrap](https://github.com/hanslub42/rlwrap) on Windows using
+Cygwin or MinGW, and on Linux and MacOS.  For MacOS, consider installing with
+Homebrew: `brew install rlwrap`
 
 System Requirements
 -------------------

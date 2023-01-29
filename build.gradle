@@ -6,7 +6,7 @@ plugins {
 }
 
 group 'com.github.mrsarm'
-version '1.2.1-RC2'
+version '1.2.1-RC3'
 
 sourceCompatibility = 9
 targetCompatibility = 9

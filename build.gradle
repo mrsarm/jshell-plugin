@@ -1,5 +1,6 @@
 plugins {
-    id 'com.gradle.plugin-publish' version '0.21.0'
+    id 'java-gradle-plugin'
+    id 'com.gradle.plugin-publish' version '1.1.0'
     id 'maven-publish'
     id 'groovy'
     id 'java-library'
@@ -20,21 +21,17 @@ dependencies {
     implementation localGroovy()
 }
 
-tasks.withType(GroovyCompile) {
-    options.fork = false
-    groovyOptions.fork = false
-}
-
-pluginBundle {
+gradlePlugin {
     website = 'https://github.com/mrsarm/jshell-plugin'
     vcsUrl = 'https://github.com/mrsarm/jshell-plugin'
     description = "JShell supports for your gradle project. Let's explore your classes and dependencies with jshell"
-    tags = ['java9', 'jshell', 'repl']
 
     plugins {
         jshellPlugin {
             id = 'com.github.mrsarm.jshell.plugin'
+            implementationClass = 'com.github.mrsarm.jshell.plugin.JShellPlugin'
             displayName = 'JShell Plugin'
+            tags.set(['java9', 'jshell', 'repl'])
         }
     }
 }

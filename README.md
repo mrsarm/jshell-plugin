@@ -7,6 +7,9 @@ the official Java REPL tool (Java 9+).
 
 Hosted in the **Gradle plugins** site: https://plugins.gradle.org/plugin/com.github.mrsarm.jshell.plugin
 
+> ### :keyboard: Use `rlwrap` to make arrow keys work ([see](#tab-completion-and-arrow-keys-not-working)).
+
+
  - [Getting started](#getting-started)
  - [Startup options](#startup-options)
  - [Spring Boot applications](#spring-boot-applications)
@@ -282,7 +285,7 @@ adding the option `--no-daemon` to start up the jshell:
 
     $ gradle --no-daemon --console plain jshell
 
-### Tab completion not working
+### Tab completion and arrow keys not working
 
 Auto-completion does not work, and pressing arrow keys triggers
 weird characters in the console. Unfortunately, with the
@@ -290,17 +293,17 @@ current console support from Gradle, there is no
 solution for this [bug](https://github.com/mrsarm/jshell-plugin/issues/2).
 
 However, the JShell task can be invoked with the command **rlwrap** from the
-console to overcome the issue:
+console to overcome the arrow keys issues:
 
     $ rlwrap ./gradlew --console plain jshell
 
-`rlwrap` takes care of the autocompletion, and the arrow keys management.
+`rlwrap` takes care of the arrow keys management and history.
 Just remember to check you have installed it before invoking the JShell with
 the command the first time.
 
 You can install [rlwrap](https://github.com/hanslub42/rlwrap) on Windows using
 Cygwin or MinGW, and on Linux and MacOS.  For MacOS, consider installing with
-Homebrew: `brew install rlwrap`
+Homebrew: `brew install rlwrap`.
 
 System Requirements
 -------------------
@@ -333,7 +336,7 @@ Publish to [plugins.gradle.org](https://plugins.gradle.org/):
 NOTE: Because Java 9 is an old version, the command above might fail in
 the execution due SSL issues, in that case better to switch to Java 11 to
 execute only the `publishPlugins` command. With Java 17+ it also fails but
-because the plugin perform some validations before send the artifacts, but
+because the plugin performs some validations before send the artifacts, but
 still the artifacts generated with Java 9 are valid for Java 17+.
 
 ### Using from the local repo

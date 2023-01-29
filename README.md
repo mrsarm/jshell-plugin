@@ -320,6 +320,8 @@ source code and execute:
 
     $ ./gradlew build
 
+The compilation must be done with the JDK 9 for general release.
+
 Publish to your local Maven repo (normally `~/.m2/repository/`):
 
     $ ./gradlew publishToMavenLocal
@@ -327,6 +329,12 @@ Publish to your local Maven repo (normally `~/.m2/repository/`):
 Publish to [plugins.gradle.org](https://plugins.gradle.org/):
 
     $ ./gradlew publishPlugins
+
+NOTE: Because Java 9 is an old version, the command above might fail in
+the execution due SSL issues, in that case better to switch to Java 11 to
+execute only the `publishPlugins` command. With Java 17+ it also fails but
+because the plugin perform some validations before send the artifacts, but
+still the artifacts generated with Java 9 are valid for Java 17+.
 
 ### Using from the local repo
 

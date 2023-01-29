@@ -24,13 +24,13 @@ dependencies {
 gradlePlugin {
     website = 'https://github.com/mrsarm/jshell-plugin'
     vcsUrl = 'https://github.com/mrsarm/jshell-plugin'
-    description = "JShell supports for your gradle project. Let's explore your classes and dependencies with jshell"
 
     plugins {
         jshellPlugin {
             id = 'com.github.mrsarm.jshell.plugin'
             implementationClass = 'com.github.mrsarm.jshell.plugin.JShellPlugin'
             displayName = 'JShell Plugin'
+            description = "JShell supports for your gradle project. Let's explore your classes and dependencies with jshell"
             tags.set(['java9', 'jshell', 'repl'])
         }
     }

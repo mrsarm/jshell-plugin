@@ -65,7 +65,7 @@ class JShellPlugin implements Plugin<Project> {
             }
             
             // Exclude non-directory / non-jar files that jshell doesn't deal with
-            pathSet = pathSet.findAll{ it.isDirectory() || it.toString().endsWith('.jar') }
+            pathSet = pathSet.findAll{ new File(it.toString()).isDirectory() || it.toString().endsWith('.jar') }
             
             def path = pathSet.join(System.getProperty("path.separator"))
             jshellTask.logger.info(":jshell executing with --class-path {}", path)

@@ -28,7 +28,8 @@ tasks.withType(GroovyCompile) {
 pluginBundle {
     website = 'https://github.com/mrsarm/jshell-plugin'
     vcsUrl = 'https://github.com/mrsarm/jshell-plugin'
-    description = "JShell supports for your gradle project. Let's explore your classes and dependencies with jshell"
+    description = "JShell supports to explore your code and dependencies in your gradle project with in jshell, " +
+                  "the official Java REPL tool (Java 9+)"
     tags = ['java9', 'jshell', 'repl']
 
     plugins {

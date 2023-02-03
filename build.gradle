@@ -1,12 +1,12 @@
 plugins {
-    id 'com.gradle.plugin-publish' version '0.19.0'
+    id 'com.gradle.plugin-publish' version '0.21.0'
     id 'maven-publish'
     id 'groovy'
     id 'java-library'
 }
 
 group 'com.github.mrsarm'
-version '1.2.0'
+version '1.2.1-RC7'
 
 sourceCompatibility = 9
 targetCompatibility = 9
@@ -28,7 +28,8 @@ tasks.withType(GroovyCompile) {
 pluginBundle {
     website = 'https://github.com/mrsarm/jshell-plugin'
     vcsUrl = 'https://github.com/mrsarm/jshell-plugin'
-    description = "JShell supports for your gradle project. Let's explore your classes and dependencies with jshell"
+    description = "JShell supports to explore your code and dependencies in your gradle project with in jshell, " +
+                  "the official Java REPL tool (Java 9+)"
     tags = ['java9', 'jshell', 'repl']
 
     plugins {
